@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.pqw.dao.TbReimburseDAO">
+	<resultMap id="BaseResultMap"
+		type="com.accp.pqw.pojo.TbReimburse">
+		<id column="reimburseId" jdbcType="VARCHAR" property="reimburseid" />
+		<result column="typeId" jdbcType="INTEGER" property="typeid" />
+		<result column="createMan" jdbcType="INTEGER"
+			property="createman" />
+		<result column="createTime" jdbcType="TIMESTAMP"
+			property="createtime" />
+		<result column="departmentId" jdbcType="INTEGER"
+			property="departmentid" />
+		<result column="nextDealMan" jdbcType="INTEGER"
+			property="nextdealman" />
+		<result column="event" jdbcType="VARCHAR" property="event" />
+		<result column="totalCount" jdbcType="REAL"
+			property="totalcount" />
+		<result column="statusId" jdbcType="INTEGER"
+			property="statusid" />
+		<association property="nextdealmanName"
+			column="nextdealman" select="name1" />
+		<association property="createmanName" column="createman"
+			select="name1" />
+		<association property="check" column="reimburseid"
+			select="check" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		reimburseId, typeId, createMan, createTime, departmentId,
+		nextDealMan, event,
+		totalCount,
+		statusId
+	</sql>
+	<select id="check" resultType="java.lang.Integer">
+		SELECT checkResult FROM tb_check
+		WHERE bizId = #{0} and typeId = 2
+		ORDER BY checkTime DESC LIMIT 0,1;
+	</select>
+	<select id="name1" resultType="java.lang.String">
+		SELECT employeeName FROM employee
+		WHERE employeeId =
+		#{0}
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_reimburse
+		where reimburseId = #{reimburseid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		tb_reimburse
+		where reimburseId =
+		#{reimburseid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.accp.pqw.pojo.TbReimburse">
+		insert into tb_reimburse (reimburseId,
+		createMan,
+		createTime, departmentId, nextDealMan,
+		event, totalCount,
+		statusId
+		)
+		values (#{reimburseid,jdbcType=VARCHAR},
+		#{createman,jdbcType=INTEGER},
+		now(),
+		#{departmentid,jdbcType=INTEGER},
+		#{nextdealman,jdbcType=INTEGER},
+		#{event,jdbcType=VARCHAR},
+		#{totalcount,jdbcType=REAL},
+		#{statusid,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.accp.pqw.pojo.TbReimburse">
+		insert into tb_reimburse
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="reimburseid != null">
+				reimburseId,
+			</if>
+			<if test="typeid != null">
+				typeId,
+			</if>
+			<if test="createman != null">
+				createMan,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="departmentid != null">
+				departmentId,
+			</if>
+			<if test="nextdealman != null">
+				nextDealMan,
+			</if>
+			<if test="event != null">
+				event,
+			</if>
+			<if test="totalcount != null">
+				totalCount,
+			</if>
+			<if test="statusid != null">
+				statusId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="reimburseid != null">
+				#{reimburseid,jdbcType=INTEGER},
+			</if>
+			<if test="typeid != null">
+				#{typeid,jdbcType=INTEGER},
+			</if>
+			<if test="createman != null">
+				#{createman,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="departmentid != null">
+				#{departmentid,jdbcType=INTEGER},
+			</if>
+			<if test="nextdealman != null">
+				#{nextdealman,jdbcType=INTEGER},
+			</if>
+			<if test="event != null">
+				#{event,jdbcType=VARCHAR},
+			</if>
+			<if test="totalcount != null">
+				#{totalcount,jdbcType=REAL},
+			</if>
+			<if test="statusid != null">
+				#{statusid,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.accp.pqw.pojo.TbReimburse">
+		update tb_reimburse
+		<set>
+			<if test="typeid != null">
+				typeId = #{typeid,jdbcType=INTEGER},
+			</if>
+			<if test="createman != null">
+				createMan = #{createman,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="departmentid != null">
+				departmentId = #{departmentid,jdbcType=INTEGER},
+			</if>
+			<if test="nextdealman != null">
+				nextDealMan = #{nextdealman,jdbcType=INTEGER},
+			</if>
+			<if test="event != null">
+				event = #{event,jdbcType=VARCHAR},
+			</if>
+			<if test="totalcount != null">
+				totalCount = #{totalcount,jdbcType=REAL},
+			</if>
+			<if test="statusid != null">
+				statusId = #{statusid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where reimburseId = #{reimburseid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.accp.pqw.pojo.TbReimburse">
+		update tb_reimburse
+		set typeId =
+		#{typeid,jdbcType=INTEGER},
+		createMan = #{createman,jdbcType=INTEGER},
+		createTime = #{createtime,jdbcType=TIMESTAMP},
+		departmentId =
+		#{departmentid,jdbcType=INTEGER},
+		nextDealMan =
+		#{nextdealman,jdbcType=INTEGER},
+		event = #{event,jdbcType=VARCHAR},
+		totalCount = #{totalcount,jdbcType=REAL},
+		statusId =
+		#{statusid,jdbcType=INTEGER}
+		where reimburseId =
+		#{reimburseid,jdbcType=INTEGER}
+	</update>
+	<select id="queryByCreateMan" resultMap="BaseResultMap">
+		SELECT * FROM
+		tb_reimburse
+		<where>
+			<if test="1==1">
+				AND createMan = #{eid}
+			</if>
+			<if test="sid!=0">
+				and statusId = #{sid}
+			</if>
+			<if test="s!=null">
+				and createTime >= #{s}
+			</if>
+			<if test="e!=null">
+				and createTime &lt;= #{e}
+			</if>
+			AND reimburseId NOT IN(SELECT reimburseId FROM tb_reimburse WHERE
+			createMan != #{eid} AND statusId = 1)
+		</where>
+		ORDER BY createTime DESC
+	</select>
+	<select id="queryByDepartment" resultMap="BaseResultMap">
+		SELECT * FROM
+		tb_reimburse
+		<where>
+			<if test="1==1">
+				AND departmentId = #{did}
+			</if>
+			<if test="sid!=0">
+				and statusId = #{sid}
+			</if>
+			<if test="s!=null">
+				and createTime >= #{s}
+			</if>
+			<if test="e!=null">
+				and createTime &lt;= #{e}
+			</if>
+			AND reimburseId NOT IN(SELECT reimburseId FROM tb_reimburse WHERE
+			createMan != #{eid} AND statusId = 1)
+		</where>
+		ORDER BY createTime DESC
+	</select>
+	<select id="queryAll" resultMap="BaseResultMap">
+		SELECT * FROM
+		tb_reimburse
+		<where>
+			<if test="sid!=0">
+				and statusId = #{sid}
+			</if>
+			<if test="s!=null">
+				and createTime >= #{s}
+			</if>
+			<if test="e!=null">
+				and createTime &lt;= #{e}
+			</if>
+			AND reimburseId NOT IN(SELECT reimburseId FROM tb_reimburse WHERE
+			createMan != #{eid} AND statusId = 1)
+		</where>
+		ORDER BY createTime DESC
+	</select>
+	<select id="queryByCashier" resultMap="BaseResultMap">
+		SELECT * FROM
+		tb_reimburse
+		<where>
+			<if test="1==1">
+				and statusId in (4,5)
+			</if>
+			<if test="s!=null">
+				and createTime >= #{s}
+			</if>
+			<if test="e!=null">
+				and createTime &lt;= #{e}
+			</if>
+			<!-- 创建人不提交，审查人看不见 -->
+			AND reimburseId NOT IN(SELECT reimburseId FROM tb_reimburse WHERE
+			createMan != #{eid} AND statusId = 1)
+		</where>
+		ORDER BY createTime DESC
+	</select>
+	<select id="selectTip" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_reimburse WHERE nextDealMan = #{id} ORDER
+		BY createTime DESC
+	</select>
+</mapper>

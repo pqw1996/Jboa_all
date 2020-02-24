@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.pqw.dao.TbCheckDAO">
+	<resultMap id="BaseResultMap"
+		type="com.accp.pqw.pojo.TbCheck">
+		<id column="checkId" jdbcType="INTEGER" property="checkid" />
+		<result column="bizId" jdbcType="VARCHAR" property="bizid" />
+		<result column="typeId" jdbcType="INTEGER" property="typeid" />
+		<result column="checkTime" jdbcType="TIME" property="checktime" />
+		<result column="checkMan" jdbcType="INTEGER"
+			property="checkman" />
+		<result column="checkResult" jdbcType="INTEGER"
+			property="checkresult" />
+		<result column="checkComment" jdbcType="VARCHAR"
+			property="checkcomment" />
+		<association property="checkmanName" column="checkman"
+			select="name1" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		checkId, bizId, typeId, checkTime, checkMan, checkResult,
+		checkComment
+	</sql>
+	<select id="name1" resultType="java.lang.String">
+		SELECT employeeName FROM employee
+		WHERE employeeId =
+		#{0}
+	</select>
+	<select id="selectByPrimaryKey"
+		parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_check
+		where checkId = #{checkid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from tb_check
+		where checkId =
+		#{checkid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.accp.pqw.pojo.TbCheck">
+		insert into tb_check (checkId,
+		bizId, typeId,
+		checkTime, checkMan, checkResult,
+		checkComment)
+		values
+		(0,
+		#{bizid,jdbcType=VARCHAR},
+		#{typeid,jdbcType=INTEGER},
+		now(),
+		#{checkman,jdbcType=INTEGER}, #{checkresult,jdbcType=INTEGER},
+		#{checkcomment,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.accp.pqw.pojo.TbCheck">
+		insert into tb_check
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="checkid != null">
+				checkId,
+			</if>
+			<if test="bizid != null">
+				bizId,
+			</if>
+			<if test="typeid != null">
+				typeId,
+			</if>
+			<if test="checktime != null">
+				checkTime,
+			</if>
+			<if test="checkman != null">
+				checkMan,
+			</if>
+			<if test="checkresult != null">
+				checkResult,
+			</if>
+			<if test="checkcomment != null">
+				checkComment,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="checkid != null">
+				#{checkid,jdbcType=INTEGER},
+			</if>
+			<if test="bizid != null">
+				#{bizid,jdbcType=VARCHAR},
+			</if>
+			<if test="typeid != null">
+				#{typeid,jdbcType=INTEGER},
+			</if>
+			<if test="checktime != null">
+				#{checktime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="checkman != null">
+				#{checkman,jdbcType=INTEGER},
+			</if>
+			<if test="checkresult != null">
+				#{checkresult,jdbcType=INTEGER},
+			</if>
+			<if test="checkcomment != null">
+				#{checkcomment,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.accp.pqw.pojo.TbCheck">
+		update tb_check
+		<set>
+			<if test="bizid != null">
+				bizId = #{bizid,jdbcType=VARCHAR},
+			</if>
+			<if test="typeid != null">
+				typeId = #{typeid,jdbcType=INTEGER},
+			</if>
+			<if test="checktime != null">
+				checkTime = #{checktime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="checkman != null">
+				checkMan = #{checkman,jdbcType=INTEGER},
+			</if>
+			<if test="checkresult != null">
+				checkResult = #{checkresult,jdbcType=INTEGER},
+			</if>
+			<if test="checkcomment != null">
+				checkComment = #{checkcomment,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where checkId = #{checkid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.accp.pqw.pojo.TbCheck">
+		update tb_check
+		set bizId = #{bizid,jdbcType=VARCHAR},
+		typeId = #{typeid,jdbcType=INTEGER},
+		checkTime =
+		#{checktime,jdbcType=TIMESTAMP},
+		checkMan =
+		#{checkman,jdbcType=INTEGER},
+		checkResult =
+		#{checkresult,jdbcType=INTEGER},
+		checkComment =
+		#{checkcomment,jdbcType=VARCHAR}
+		where checkId =
+		#{checkid,jdbcType=INTEGER}
+	</update>
+	<select id="selectByBizId" resultMap="BaseResultMap">
+		SELECT
+		checkId,bizId,typeId,checkTime,checkMan,checkResult,checkComment,employeeName
+		AS checkmanName
+		FROM tb_check,employee WHERE typeId = #{tid} AND bizId
+		=
+		#{bid} AND
+		tb_check.checkMan = employee.employeeId ORDER BY checkTime
+		ASC
+	</select>
+	<delete id="deleteByBizId" parameterType="java.lang.String">
+		delete from
+		tb_check
+		where bizId =
+		#{bizId,jdbcType=VARCHAR}
+	</delete>
+</mapper>

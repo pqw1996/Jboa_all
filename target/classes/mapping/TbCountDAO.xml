@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.pqw.dao.TbCountDAO">
+	<resultMap id="BaseResultMap"
+		type="com.accp.pqw.pojo.TbCount">
+		<id column="countId" jdbcType="INTEGER" property="countid" />
+		<result column="money" jdbcType="REAL" property="money" />
+		<result column="year" jdbcType="INTEGER" property="year" />
+		<result column="month" jdbcType="INTEGER" property="month" />
+		<result column="departmentId" jdbcType="INTEGER"
+			property="departmentid" />
+		<result column="employeeId" jdbcType="INTEGER"
+			property="employeeid" />
+		<result column="departmentName" jdbcType="VARCHAR"
+			property="departmentname" />
+		<result column="employeeName" jdbcType="VARCHAR"
+			property="employeename" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		countId, money, `year`, `month`, departmentId, employeeId,
+		departmentName,
+		employeeName
+	</sql>
+	<select id="selectByPrimaryKey"
+		parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_count
+		where countId = #{countid,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from tb_count
+		where countId =
+		#{countid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.accp.pqw.pojo.TbCount">
+		INSERT INTO tb_count
+		VALUES(0,#{money,jdbcType=REAL},YEAR(CURDATE()),MONTH(CURDATE()),#{departmentid,jdbcType=INTEGER},#{employeeid,jdbcType=INTEGER},(SELECT
+		departmentName FROM department WHERE departmentId =
+		#{departmentid,jdbcType=INTEGER}),(SELECT
+		employeeName FROM employee
+		WHERE employeeId = #{employeeid,jdbcType=INTEGER}))
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.accp.pqw.pojo.TbCount">
+		insert into tb_count
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="countid != null">
+				countId,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="year != null">
+				`year`,
+			</if>
+			<if test="month != null">
+				`month`,
+			</if>
+			<if test="departmentid != null">
+				departmentId,
+			</if>
+			<if test="employeeid != null">
+				employeeId,
+			</if>
+			<if test="departmentname != null">
+				departmentName,
+			</if>
+			<if test="employeename != null">
+				employeeName,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="countid != null">
+				#{countid,jdbcType=INTEGER},
+			</if>
+			<if test="money != null">
+				#{money,jdbcType=REAL},
+			</if>
+			<if test="year != null">
+				#{year,jdbcType=INTEGER},
+			</if>
+			<if test="month != null">
+				#{month,jdbcType=INTEGER},
+			</if>
+			<if test="departmentid != null">
+				#{departmentid,jdbcType=INTEGER},
+			</if>
+			<if test="employeeid != null">
+				#{employeeid,jdbcType=INTEGER},
+			</if>
+			<if test="departmentname != null">
+				#{departmentname,jdbcType=VARCHAR},
+			</if>
+			<if test="employeename != null">
+				#{employeename,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.accp.pqw.pojo.TbCount">
+		update tb_count
+		<set>
+			<if test="money != null">
+				money = #{money,jdbcType=REAL},
+			</if>
+			<if test="year != null">
+				`year` = #{year,jdbcType=INTEGER},
+			</if>
+			<if test="month != null">
+				`month` = #{month,jdbcType=INTEGER},
+			</if>
+			<if test="departmentid != null">
+				departmentId = #{departmentid,jdbcType=INTEGER},
+			</if>
+			<if test="employeeid != null">
+				employeeId = #{employeeid,jdbcType=INTEGER},
+			</if>
+			<if test="departmentname != null">
+				departmentName = #{departmentname,jdbcType=VARCHAR},
+			</if>
+			<if test="employeename != null">
+				employeeName = #{employeename,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where countId = #{countid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.accp.pqw.pojo.TbCount">
+		update tb_count
+		set money = #{money,jdbcType=REAL},
+		`year` = #{year,jdbcType=INTEGER},
+		`month` = #{month,jdbcType=INTEGER},
+		departmentId = #{departmentid,jdbcType=INTEGER},
+		employeeId =
+		#{employeeid,jdbcType=INTEGER},
+		departmentName =
+		#{departmentname,jdbcType=VARCHAR},
+		employeeName =
+		#{employeename,jdbcType=VARCHAR}
+		where countId =
+		#{countid,jdbcType=INTEGER}
+	</update>
+</mapper>

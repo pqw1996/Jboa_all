@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.pqw.dao.TokenDAO">
+	<resultMap type="com.accp.pqw.pojo.Token" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="money" property="money" jdbcType="REAL" />
+	</resultMap>
+
+	<select id="selectTokens1" resultMap="BaseResultMap">
+		SELECT
+		departmentId AS id,
+		SUM(money) AS money,
+		departmentName AS `name`
+		FROM
+		tb_count
+		WHERE `month`
+		= #{month,jdbcType=INTEGER}
+		AND `year` = #{year,jdbcType=INTEGER}
+		GROUP
+		BY departmentName,
+		departmentId
+		ORDER BY departmentId
+	</select>
+
+	<select id="selectTokens2" resultMap="BaseResultMap">
+		SELECT
+		employeeId AS id,
+		SUM(money) AS money,
+		employeeName AS `name`
+		FROM
+		tb_count
+		WHERE
+		departmentId = #{did,jdbcType=INTEGER}
+		AND `year` =
+		#{year,jdbcType=INTEGER}
+		AND `month` = #{month,jdbcType=INTEGER}
+		GROUP
+		BY employeeName,
+		employeeId
+		ORDER BY employeeId
+	</select>
+
+	<select id="selectTokens3" resultMap="BaseResultMap">
+		SELECT
+		departmentId AS id,
+		SUM(money) AS money,
+		departmentName AS `name`
+		FROM
+		tb_count
+		WHERE `year` =
+		#{year,jdbcType=INTEGER}
+		GROUP BY departmentName,
+		departmentId
+		ORDER BY
+		departmentId
+	</select>
+
+	<select id="selectTokens4" resultMap="BaseResultMap">
+		SELECT
+		employeeId AS id,
+		SUM(money) AS money,
+		employeeName AS `name`
+		FROM
+		tb_count
+		WHERE
+		departmentId = #{did,jdbcType=INTEGER}
+		AND `year` =
+		#{year,jdbcType=INTEGER}
+		GROUP BY employeeName,
+		employeeId
+		ORDER BY
+		employeeId
+	</select>
+</mapper>

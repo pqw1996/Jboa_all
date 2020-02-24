@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.pqw.dao.TbLeaveDAO">
+	<resultMap id="BaseResultMap"
+		type="com.accp.pqw.pojo.TbLeave">
+		<id column="leaveId" jdbcType="VARCHAR" property="leaveid" />
+		<result column="typeId" jdbcType="INTEGER" property="typeid" />
+		<result column="createMan" jdbcType="INTEGER"
+			property="createman" />
+		<result column="departmentId" jdbcType="INTEGER"
+			property="departmentid" />
+		<result column="createTime" jdbcType="TIME"
+			property="createtime" />
+		<result column="startTime" jdbcType="TIME" property="starttime" />
+		<result column="endTime" jdbcType="TIME" property="endtime" />
+		<result column="nextDealMan" jdbcType="INTEGER"
+			property="nextdealman" />
+		<result column="event" jdbcType="VARCHAR" property="event" />
+		<result column="totalCount" jdbcType="INTEGER"
+			property="totalcount" />
+		<result column="statusId" jdbcType="INTEGER"
+			property="statusid" />
+		<association property="createmanName" column="createman"
+			select="name1" />
+		<association property="nextdealmanName"
+			column="nextdealman" select="name1" />
+		<association property="departmentName"
+			column="departmentId" select="name2" />
+		<collection property="checkList" column="leaveId"
+			select="selectChecks" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		leaveId, typeId, createMan, departmentId, createTime,
+		startTime, endTime,
+		nextDealMan,
+		event, totalCount, statusId
+	</sql>
+	<select id="selectChecks" resultType="com.accp.pqw.pojo.TbCheck">
+		SELECT
+		checkId,bizId,typeId,checkTime,checkMan,checkResult,checkComment,employeeName
+		AS checkmanName
+		FROM tb_check,employee WHERE typeId = 1 AND bizId =
+		#{0} AND
+		tb_check.checkMan = employee.employeeId ORDER BY checkTime
+		DESC
+	</select>
+	<select id="name1" resultType="java.lang.String">
+		SELECT employeeName FROM employee
+		WHERE employeeId =
+		#{0}
+	</select>
+	<select id="name2" resultType="java.lang.String">
+		SELECT departmentName FROM
+		department WHERE
+		departmentId = #{0}
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_leave
+		where leaveId = #{leaveid,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from tb_leave
+		where leaveId =
+		#{leaveid,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.accp.pqw.pojo.TbLeave">
+		insert into tb_leave
+		(leaveId,createMan,
+		departmentId, createTime, startTime,
+		endTime,
+		nextDealMan, event,
+		totalCount, statusId)
+		values
+		(#{leaveid,jdbcType=VARCHAR},
+		#{createman,jdbcType=INTEGER},
+		#{departmentid,jdbcType=INTEGER}, now(),
+		#{starttime,jdbcType=TIMESTAMP},
+		#{endtime,jdbcType=TIMESTAMP},
+		#{nextdealman,jdbcType=INTEGER}, #{event,jdbcType=VARCHAR},
+		#{totalcount,jdbcType=INTEGER}, #{statusid,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.accp.pqw.pojo.TbLeave">
+		insert into tb_leave
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="leaveid != null">
+				leaveId,
+			</if>
+			<if test="typeid != null">
+				typeId,
+			</if>
+			<if test="createman != null">
+				createMan,
+			</if>
+			<if test="departmentid != null">
+				departmentId,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="starttime != null">
+				startTime,
+			</if>
+			<if test="endtime != null">
+				endTime,
+			</if>
+			<if test="nextdealman != null">
+				nextDealMan,
+			</if>
+			<if test="event != null">
+				event,
+			</if>
+			<if test="totalcount != null">
+				totalCount,
+			</if>
+			<if test="statusid != null">
+				statusId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="leaveid != null">
+				#{leaveid,jdbcType=VARCHAR},
+			</if>
+			<if test="typeid != null">
+				#{typeid,jdbcType=INTEGER},
+			</if>
+			<if test="createman != null">
+				#{createman,jdbcType=INTEGER},
+			</if>
+			<if test="departmentid != null">
+				#{departmentid,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="starttime != null">
+				#{starttime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endtime != null">
+				#{endtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nextdealman != null">
+				#{nextdealman,jdbcType=INTEGER},
+			</if>
+			<if test="event != null">
+				#{event,jdbcType=VARCHAR},
+			</if>
+			<if test="totalcount != null">
+				#{totalcount,jdbcType=INTEGER},
+			</if>
+			<if test="statusid != null">
+				#{statusid,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.accp.pqw.pojo.TbLeave">
+		update tb_leave
+		<set>
+			<if test="typeid != null">
+				typeId = #{typeid,jdbcType=INTEGER},
+			</if>
+			<if test="createman != null">
+				createMan = #{createman,jdbcType=INTEGER},
+			</if>
+			<if test="departmentid != null">
+				departmentId = #{departmentid,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="starttime != null">
+				startTime = #{starttime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endtime != null">
+				endTime = #{endtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nextdealman != null">
+				nextDealMan = #{nextdealman,jdbcType=INTEGER},
+			</if>
+			<if test="event != null">
+				event = #{event,jdbcType=VARCHAR},
+			</if>
+			<if test="totalcount != null">
+				totalCount = #{totalcount,jdbcType=INTEGER},
+			</if>
+			<if test="statusid != null">
+				statusId = #{statusid,jdbcType=INTEGER},
+			</if>
+		</set>
+		where leaveId = #{leaveid,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.accp.pqw.pojo.TbLeave">
+		update tb_leave
+		set typeId = #{typeid,jdbcType=INTEGER},
+		createMan = #{createman,jdbcType=INTEGER},
+		departmentId =
+		#{departmentid,jdbcType=INTEGER},
+		createTime =
+		#{createtime,jdbcType=TIMESTAMP},
+		startTime =
+		#{starttime,jdbcType=TIMESTAMP},
+		endTime =
+		#{endtime,jdbcType=TIMESTAMP},
+		nextDealMan =
+		#{nextdealman,jdbcType=INTEGER},
+		event = #{event,jdbcType=VARCHAR},
+		totalCount = #{totalcount,jdbcType=INTEGER},
+		statusId =
+		#{statusid,jdbcType=INTEGER}
+		where leaveId =
+		#{leaveid,jdbcType=VARCHAR}
+	</update>
+	<select id="selectByEmpId" resultMap="BaseResultMap">
+		SELECT * FROM tb_leave
+		<where>
+			<if test="id!=null">
+				and createMan = #{id}
+			</if>
+			<if test="start!=null">
+				and startTime >= #{start}
+			</if>
+			<if test="end!=null">
+				and endTime &lt;= #{end}
+			</if>
+		</where>
+		ORDER
+		BY
+		createTime DESC
+	</select>
+	<select id="selectByDepId" resultMap="BaseResultMap">
+		SELECT * FROM tb_leave
+		<where>
+			<if test="id!=null">
+				and departmentId = #{id}
+			</if>
+			<if test="start!=null">
+				and startTime >= #{start}
+			</if>
+			<if test="end!=null">
+				and endTime &lt;= #{end}
+			</if>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		SELECT * FROM tb_leave
+		<where>
+			<if test="start!=null">
+				and startTime >= #{start}
+			</if>
+			<if test="end!=null">
+				and endTime &lt;= #{end}
+			</if>
+		</where>
+		ORDER BY leaveId DESC
+	</select>
+	<select id="selectGetApproved" resultMap="BaseResultMap">
+		SELECT * FROM tb_leave
+		<where>
+			<if test="1==1">
+				AND (leaveId IN (SELECT DISTINCT bizId FROM tb_check
+				WHERE typeId
+				= 1 AND
+				checkResult = 1 AND checkMan != 1017) OR
+				createMan = 1017)
+			</if>
+			<if test="start!=null">
+				and startTime >= #{start}
+			</if>
+			<if test="end!=null">
+				and endTime &lt;= #{end}
+			</if>
+		</where>
+		ORDER BY createTime DESC
+	</select>
+	<select id="selectTip" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT * FROM tb_leave WHERE
+		nextDealMan = #{id} ORDER
+		BY
+		createTime DESC
+	</select>
+</mapper>
